@@ -6,43 +6,40 @@ module my_chip (
     input logic clock,
     input logic reset // Important: Reset is ACTIVE-HIGH
 );
+    // input
+    logic [7:0] data_in;
+    logic enter, sw;
+    logic rst;
+    logic [1:0] operation;
+
+    // output
+    logic [4:0] data_out;
+    logic finish, error;
+    logic [3:0] index;
+
+    // input synchronization and assignment
+    Synchronizer sync1(.async(io_in[7:0]), .clock(clock), .sync(data_in[7:0]));
+    Synchronizer sync2(.async(io_in[8]), .clock(clock), .sync(enter));
+    Synchronizer sync3(.async(io_in[9]), .clock(clock), .sync(sw));
+    Synchronizer sync4(.async(io_in[11:10]), .clock(clock), .sync(operation[1:0]));
+    Synchronizer sync5(.async(reset), .clock(clock), .sync(rst));
+
+    // output assignment
+    assign io_out[4:0] = data_out[4:0];
+    assign io_out[5] = finish;
+    assign io_out[6] = error;
+    assign io_out[10:7] = index[3:0];
+
     
-    // Basic counter design as an example
-    // TODO: remove the counter design and use this module to insert your own design
-    // DO NOT change the I/O header of this design
-
-    wire [6:0] led_out;
-    assign io_out[6:0] = led_out;
-
-    // external clock is 1000Hz, so need 10 bit counter
-    reg [9:0] second_counter;
-    reg [3:0] digit;
-
-    always @(posedge clock) begin
-        // if reset, set counter to 0
-        if (reset) begin
-            second_counter <= 0;
-            digit <= 0;
-        end else begin
-            // if up to 16e6
-            if (second_counter == 1000) begin
-                // reset
-                second_counter <= 0;
-
-                // increment digit
-                digit <= digit + 1'b1;
-
-                // only count from 0 to 9
-                if (digit == 9)
-                    digit <= 0;
-
-            end else
-                // increment counter
-                second_counter <= second_counter + 1'b1;
-        end
-    end
-
-    // instantiate segment display
-    seg7 seg7(.counter(digit), .segments(led_out));
+    Matrix_Calculator matrix_calculator(.data_in(data_in),
+                                        .enter(enter),
+                                        .sw(sw),
+                                        .operation(operation), 
+                                        .clk(clock), 
+                                        .rst(rst), 
+                                        .data_out(data_out), 
+                                        .finish(finish), 
+                                        .error(error), 
+                                        .index(index));
 
 endmodule
