@@ -109,29 +109,29 @@ module add_fsm (input logic clk, rst, add_en,
     always_comb begin
         case(cur_state)
             S: begin
-                shift_en = 1'b0;
-                finish = 1'b0;
+                shift_en <= 1'b0;
+                finish <= 1'b0;
                 if(add_en) begin
-                    n_state = A1;
+                    n_state <= A1;
                 end
                 else begin
-                    n_state = S;
+                    n_state <= S;
                 end
             end
             A1: begin
-                shift_en = 1'b1;
-                finish = 1'b0;
-                n_state = E;
+                shift_en <= 1'b1;
+                finish <= 1'b0;
+                n_state <= E;
             end
             E: begin
-                shift_en = 1'b0;
-                finish = 1'b1;
-                n_state = E;
+                shift_en <= 1'b0;
+                finish <= 1'b1;
+                n_state <= E;
             end
             default: begin
-                shift_en = 1'b0;
-                finish = 1'b0;
-                n_state = S;
+                shift_en <= 1'b0;
+                finish <= 1'b0;
+                n_state <= S;
             end
         endcase
     end
