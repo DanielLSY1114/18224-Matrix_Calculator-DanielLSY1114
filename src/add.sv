@@ -8,41 +8,29 @@ module Add_Path(input logic [63:0] mat_A, mat_B,
     
     logic shift_en;
 
-    logic [79:0] shift_in;
+    logic [39:0] shift_in;
     
     logic [4:0] add1_out, add2_out, add3_out, add4_out;
-    logic [4:0] add5_out, add6_out, add7_out, add8_out;
 
     logic [3:0] add1_in1, add1_in2, add2_in1, add2_in2;
     logic [3:0] add3_in1, add3_in2, add4_in1, add4_in2;
-    logic [3:0] add5_in1, add5_in2, add6_in1, add6_in2;
-    logic [3:0] add7_in1, add7_in2, add8_in1, add8_in2;
 
     Adder #(4) add1 (.S(add1_out), .add(~sign), .A(add1_in1), .B(add1_in2));
     Adder #(4) add2 (.S(add2_out), .add(~sign), .A(add2_in1), .B(add2_in2));
     Adder #(4) add3 (.S(add3_out), .add(~sign), .A(add3_in1), .B(add3_in2));
     Adder #(4) add4 (.S(add4_out), .add(~sign), .A(add4_in1), .B(add4_in2));
-    Adder #(4) add5 (.S(add5_out), .add(~sign), .A(add5_in1), .B(add5_in2));
-    Adder #(4) add6 (.S(add6_out), .add(~sign), .A(add6_in1), .B(add6_in2));
-    Adder #(4) add7 (.S(add7_out), .add(~sign), .A(add7_in1), .B(add7_in2));
-    Adder #(4) add8 (.S(add8_out), .add(~sign), .A(add8_in1), .B(add8_in2));
 
-    assign shift_in[79:70] = {5'b0, add1_out};
-    assign shift_in[69:60] = {5'b0, add2_out};
-    assign shift_in[59:50] = {5'b0, add3_out};
-    assign shift_in[49:40] = {5'b0, add4_out};
-    assign shift_in[39:30] = {5'b0, add5_out};
-    assign shift_in[29:20] = {5'b0, add6_out};
-    assign shift_in[19:10] = {5'b0, add7_out};
-    assign shift_in[9:0] = {5'b0, add8_out};
 
-    ShiftRegister_80_160 shift1 (.data_in(shift_in), .en(shift_en), .clock(clk), .rst(rst), .Q(mat_out));
+    assign shift_in[39:30] = {5'b0, add1_out};
+    assign shift_in[29:20] = {5'b0, add2_out};
+    assign shift_in[19:10] = {5'b0, add3_out};
+    assign shift_in[9:0] = {5'b0, add4_out};
+
+    ShiftRegister_40_160 shift1 (.data_in(shift_in), .en(shift_en), .clock(clk), .rst(rst), .Q(mat_out));
 
     add_fsm fsm (.mat_A(mat_A), .mat_B(mat_B), .clk(clk), .rst(rst), .add_en(add_en),
                  .add1_in1(add1_in1), .add1_in2(add1_in2), .add2_in1(add2_in1), .add2_in2(add2_in2),
                  .add3_in1(add3_in1), .add3_in2(add3_in2), .add4_in1(add4_in1), .add4_in2(add4_in2),
-                 .add5_in1(add5_in1), .add5_in2(add5_in2), .add6_in1(add6_in1), .add6_in2(add6_in2),
-                 .add7_in1(add7_in1), .add7_in2(add7_in2), .add8_in1(add8_in1), .add8_in2(add8_in2),
                  .shift_en(shift_en), .finish(finish));
     
 
@@ -99,7 +87,7 @@ module add_fsm (input logic [63:0] mat_A, mat_B,
     assign mat_B_15 = mat_B[7:4];
     assign mat_B_16 = mat_B[3:0];
 
-    enum logic [1:0] {S,A1,A2,E} cur_state, n_state;
+    enum logic [3:0] {S,A1,A2,A3,A4,E} cur_state, n_state;
     always_comb begin
         case(cur_state)
             S: begin
@@ -111,14 +99,6 @@ module add_fsm (input logic [63:0] mat_A, mat_B,
                 add3_in2 = 4'b0;
                 add4_in1 = 4'b0;
                 add4_in2 = 4'b0;
-                add5_in1 = 4'b0;
-                add5_in2 = 4'b0;
-                add6_in1 = 4'b0;
-                add6_in2 = 4'b0;
-                add7_in1 = 4'b0;
-                add7_in2 = 4'b0;
-                add8_in1 = 4'b0;
-                add8_in2 = 4'b0;
                 shift_en = 1'b0;
                 finish = 1'b0;
                 if(add_en) begin
@@ -137,19 +117,24 @@ module add_fsm (input logic [63:0] mat_A, mat_B,
                 add3_in2 = mat_B_3;
                 add4_in1 = mat_A_4;
                 add4_in2 = mat_B_4;
-                add5_in1 = mat_A_5;
-                add5_in2 = mat_B_5;
-                add6_in1 = mat_A_6;
-                add6_in2 = mat_B_6;
-                add7_in1 = mat_A_7;
-                add7_in2 = mat_B_7;
-                add8_in1 = mat_A_8;
-                add8_in2 = mat_B_8;
                 shift_en = 1'b1;
                 finish = 1'b0;
                 n_state = A2;
             end
             A2: begin
+                add1_in1 = mat_A_5;
+                add1_in2 = mat_B_5;
+                add2_in1 = mat_A_6;
+                add2_in2 = mat_B_6;
+                add3_in1 = mat_A_7;
+                add3_in2 = mat_B_7;
+                add4_in1 = mat_A_8;
+                add4_in2 = mat_B_8;
+                shift_en = 1'b1;
+                finish = 1'b0;
+                n_state = A3;
+            end
+            A3: begin
                 add1_in1 = mat_A_9;
                 add1_in2 = mat_B_9;
                 add2_in1 = mat_A_10;
@@ -158,14 +143,19 @@ module add_fsm (input logic [63:0] mat_A, mat_B,
                 add3_in2 = mat_B_11;
                 add4_in1 = mat_A_12;
                 add4_in2 = mat_B_12;
-                add5_in1 = mat_A_13;
-                add5_in2 = mat_B_13;
-                add6_in1 = mat_A_14;
-                add6_in2 = mat_B_14;
-                add7_in1 = mat_A_15;
-                add7_in2 = mat_B_15;
-                add8_in1 = mat_A_16;
-                add8_in2 = mat_B_16;
+                shift_en = 1'b1;
+                finish = 1'b0;
+                n_state = A4;
+            end
+            A4: begin
+                add1_in1 = mat_A_13;
+                add1_in2 = mat_B_13;
+                add2_in1 = mat_A_14;
+                add2_in2 = mat_B_14;
+                add3_in1 = mat_A_15;
+                add3_in2 = mat_B_15;
+                add4_in1 = mat_A_16;
+                add4_in2 = mat_B_16;
                 shift_en = 1'b1;
                 finish = 1'b0;
                 n_state = E;
@@ -179,14 +169,6 @@ module add_fsm (input logic [63:0] mat_A, mat_B,
                 add3_in2 = 4'b0;
                 add4_in1 = 4'b0;
                 add4_in2 = 4'b0;
-                add5_in1 = 4'b0;
-                add5_in2 = 4'b0;
-                add6_in1 = 4'b0;
-                add6_in2 = 4'b0;
-                add7_in1 = 4'b0;
-                add7_in2 = 4'b0;
-                add8_in1 = 4'b0;
-                add8_in2 = 4'b0;
                 shift_en = 1'b0;
                 finish = 1'b1;
                 n_state = E;
@@ -200,14 +182,7 @@ module add_fsm (input logic [63:0] mat_A, mat_B,
                 add3_in2 = 4'b0;
                 add4_in1 = 4'b0;
                 add4_in2 = 4'b0;
-                add5_in1 = 4'b0;
-                add5_in2 = 4'b0;
-                add6_in1 = 4'b0;
-                add6_in2 = 4'b0;
-                add7_in1 = 4'b0;
-                add7_in2 = 4'b0;
-                add8_in1 = 4'b0;
-                add8_in2 = 4'b0;
+                shift_en = 1'b0;
                 finish = 1'b0;
                 n_state = S;
             end
