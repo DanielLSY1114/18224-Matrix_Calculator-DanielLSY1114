@@ -33,7 +33,7 @@ set ::env(FP_SIZING) absolute
 set ::env(DIE_AREA) "0 0 320 320"
 
 ## THIS IS THE ONLY LINE YOU CAN EDIT
-set ::env(FP_CORE_UTIL) 34
+set ::env(FP_CORE_UTIL) 31
 
 ## set ::env(PL_BASIC_PLACEMENT) {1}
 
