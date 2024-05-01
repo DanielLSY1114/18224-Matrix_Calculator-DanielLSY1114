@@ -71,14 +71,28 @@ Output:
 
 ## Design Testing / Bringup
 
-(explain how to test your design; if relevant, give examples of inputs and expected outputs)
+Before tapeout, this project can be tested using a cocotb simulator testbench.
 
-(if you would like your design to be tested after integration but before tapeout, provide a Python script that uses the Debug Interface posted on canvas and explain here how to run the testing script)
+The file is cal_testbench.py and testbench.mk in src folder.
 
-## Media
+The tests are separated into 4 parts, multiplication, addition, subtraction, and error. Each part will focus testing on one function. At the start of each test, it will randomly generate two matrices. Then it will feed two matrices to the input. After the result is outputted, it will check it against a golden model. The golden model calculates the result using numpy library. Each of these 4 tests will run 10 times. After run all the tests, it will output the result as Pass or Fail.
 
-(optionally include any photos or videos of your design in action)
+After tapeout, tests will require manual inputs. Data can be inputted following the "How It Works" section.
 
-## (anything else)
+Example Input:
 
-If there is anything else you would like to document about your project such as background information, design space exploration, future ideas, verification details, references, etc etc. please add it here. This template is meant to be a guideline, not an exact format that you're required to follow.
+Input data is 1111_1111, calculation sign is 00.
+
+Press enter 16 times.
+
+Example Output: 
+
+When finish is 1, output data is 1110_0, index indicator is 0000.
+
+Press change 1 time. Output data is 0010_0, index indicator is 0000.
+
+Press change 1 time. Output data is 1110_0, index indicator is 0001.
+
+Press change 1 time. Output data is 0010_0, index indicator is 0001.
+
+.....
