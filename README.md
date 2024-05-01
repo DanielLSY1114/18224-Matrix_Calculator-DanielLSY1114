@@ -53,13 +53,21 @@ The addition and subtraction will be accomplished with 16 cycles. In each cycle,
 
 ## Inputs/Outputs
 
-(describe what each of the 12 input and 12 output pins are used for; )
+Input:
 
-(if you have any specific dependency on clock frequency; i.e. for visual effects or for an external interface, explain it here.)
+8 data, 2 calculation sign, 1 input enter, 1 output change
+
+Output:
+
+5 data, 1 finish, 1 error, 4 index indicator
 
 ## Hardware Peripherals
 
-(if you have any external hardware peripherals such as buttons, LEDs, sensors, etc, please explain them here. otherwise, remove this section)
+10 switches, 8 for data input, 2 for calculation sign input
+
+2 buttons, 1 for input enter, 1 for output change
+
+11 LEDs, 5 for data output, 1 for finish, 1 for error, 4 for index indicator
 
 ## Design Testing / Bringup
 
