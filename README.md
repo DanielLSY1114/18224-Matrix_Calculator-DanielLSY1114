@@ -13,15 +13,25 @@ Each number of the matrix is 4 bit. During each of the inputs, the 8 bit data wi
 
 The sequence of entering elements is shown below.
 
-  Matrix 1       Matrix 2 
+Matrix 1
   
-00 00 01 01    08 08 09 09
+00 00 01 01
 
-02 02 03 03    10 10 11 11
+02 02 03 03
 
-04 04 05 05    12 12 13 13
+04 04 05 05
 
-06 06 07 07    14 14 15 15
+06 06 07 07
+
+Matrix 2
+
+08 08 09 09
+
+10 10 11 11
+
+12 12 13 13
+
+14 14 15 15
 
 During entering the last two element of the second matrix, the calculation sign will also need to be selected. 00 is multiplication. 01 is addition. 10 is subtraction. 11 is an undefined behavior, which will raise an error flag in output.
 
