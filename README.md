@@ -87,6 +87,8 @@ Press enter 16 times.
 
 Example Output: 
 
+Error is always 0.
+
 When finish is 1, output data is 1110_0, index indicator is 0000.
 
 Press change 1 time. Output data is 0010_0, index indicator is 0000.
