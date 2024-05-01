@@ -65,7 +65,7 @@ Output:
 
 10 switches: 8 for data input, 2 for calculation sign input
 
-2 buttons: 1 for input enter, 1 for output change
+2 active-high buttons: 1 for input enter, 1 for output change
 
 11 LEDs: 5 for data output, 1 for finish, 1 for error, 4 for index indicator
 
