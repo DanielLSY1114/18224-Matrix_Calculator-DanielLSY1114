@@ -98,3 +98,9 @@ Press change 1 time. Output data is 1110_0, index indicator is 0001.
 Press change 1 time. Output data is 0010_0, index indicator is 0001.
 
 .....
+
+## MEDIA
+
+Proof of project in action.
+
+![](proof.png)
